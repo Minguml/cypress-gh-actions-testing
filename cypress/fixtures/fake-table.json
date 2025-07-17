@@ -1,0 +1,50 @@
+{
+    "status": "success",
+    "data": [
+        {
+            "symbol": "FAKE0001",
+            "total_volume": 1234567,
+            "underlying": "ABC",
+            "call_put": "P",
+            "issuer": "XYZ",
+            "strike": 54321,
+            "last_trading_date": "2030-01-01"
+        },
+        {
+            "symbol": "FAKE0002",
+            "total_volume": 7654321,
+            "underlying": "DEF",
+            "call_put": "C",
+            "issuer": "QRS",
+            "strike": 98765,
+            "last_trading_date": "2031-06-15"
+        },
+        {
+            "symbol": "FAKE0003",
+            "total_volume": 2345678,
+            "underlying": "GHI",
+            "call_put": "P",
+            "issuer": "LMN",
+            "strike": 11223,
+            "last_trading_date": "2029-12-31"
+        },
+        {
+            "symbol": "FAKE0004",
+            "total_volume": 8765432,
+            "underlying": "JKL",
+            "call_put": "C",
+            "issuer": "TUV",
+            "strike": 33445,
+            "last_trading_date": "2032-03-20"
+        },
+        {
+            "symbol": "FAKE0005",
+            "total_volume": 3456789,
+            "underlying": "MNO",
+            "call_put": "P",
+            "issuer": "WXY",
+            "strike": 55667,
+            "last_trading_date": "2033-08-10"
+        }
+    ]
+}
