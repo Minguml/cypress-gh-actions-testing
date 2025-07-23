@@ -1,9 +1,8 @@
 const { defineConfig } = require("cypress");
-const { cloudPlugin } = require("cypress-cloud/plugin");
 
 module.exports = defineConfig({
+    projectId: "sunvy1",
     e2e: {
-        baseUrl: "http://localhost:5173",
         env: {
             apiBaseUrl: "http://192.168.66.23:8000/api",
             // Login credentials from environment variables
@@ -20,9 +19,7 @@ module.exports = defineConfig({
                 handle: "/otp/handle",
             },
         },
-        setupNodeEvents(on, config) {
-            return cloudPlugin(on, config);
-        },
+        setupNodeEvents(on, config) {},
     },
 
     component: {
