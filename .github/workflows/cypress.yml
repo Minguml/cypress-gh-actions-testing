@@ -80,6 +80,8 @@ jobs:
               github.event.inputs.environment == 'development' && 'https://dev-pro-trading.phs.vn' ||
               'https://uat-pro-trading.phs.vn'
             }}
+          CYPRESS_USERNAME: ${{ secrets.USERNAME }}
+          CYPRESS_PASSWORD: ${{ secrets.PASSWORD }}
       
       # Step 5: Upload screenshots if tests fail
       - name: 📸 Upload Screenshots
