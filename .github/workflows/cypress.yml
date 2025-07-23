@@ -1,4 +1,4 @@
-name: 🚀 Run Cypress Tests
+name: 🚀 Run Trading Platform Tests
 on:
   # This allows manual triggering from GitHub UI
   workflow_dispatch:
@@ -15,14 +15,13 @@ on:
       test_suite:
         description: 'Which tests to run'
         required: true
-        default: 'smoke'
+        default: 'all'
         type: choice
         options:
-        - smoke
-        - regression
         - all
-        - login
-        - checkout
+        - trading-platform
+        - login-only
+        - buy-order-flow
       browser:
         description: 'Which browser to use'
         required: true
@@ -35,7 +34,7 @@ on:
 
 jobs:
   cypress-tests:
-    name: Run Tests
+    name: Run Trading Tests
     runs-on: ubuntu-latest
     
     steps:
@@ -62,20 +61,24 @@ jobs:
           spec: |
             ${{
               github.event.inputs.test_suite == 'all' && 'cypress/e2e/**/*.cy.js' ||
-              github.event.inputs.test_suite == 'smoke' && 'cypress/e2e/smoke/**/*.cy.js' ||
-              github.event.inputs.test_suite == 'regression' && 'cypress/e2e/regression/**/*.cy.js' ||
-              github.event.inputs.test_suite == 'login' && 'cypress/e2e/login/**/*.cy.js' ||
-              github.event.inputs.test_suite == 'checkout' && 'cypress/e2e/checkout/**/*.cy.js' ||
+              github.event.inputs.test_suite == 'trading-platform' && 'cypress/e2e/trading-platform.cy.js' ||
               'cypress/e2e/**/*.cy.js'
+            }}
+          # Use grep to run specific tests within the file
+          command: |
+            ${{
+              github.event.inputs.test_suite == 'login-only' && 'npx cypress run --browser ${{ github.event.inputs.browser }} --spec cypress/e2e/trading-platform.cy.js --grep "should visit pro-trading platform and login"' ||
+              github.event.inputs.test_suite == 'buy-order-flow' && 'npx cypress run --browser ${{ github.event.inputs.browser }} --spec cypress/e2e/trading-platform.cy.js --grep "should click buy button"' ||
+              ''
             }}
         env:
           # Set the base URL based on environment choice
           CYPRESS_BASE_URL: |
             ${{
-              github.event.inputs.environment == 'production' && 'https://yourapp.com' ||
-              github.event.inputs.environment == 'staging' && 'https://staging.yourapp.com' ||
-              github.event.inputs.environment == 'development' && 'https://dev.yourapp.com' ||
-              'https://staging.yourapp.com'
+              github.event.inputs.environment == 'production' && 'https://pro-trading.phs.vn' ||
+              github.event.inputs.environment == 'staging' && 'https://uat-pro-trading.phs.vn' ||
+              github.event.inputs.environment == 'development' && 'https://dev-pro-trading.phs.vn' ||
+              'https://uat-pro-trading.phs.vn'
             }}
       
       # Step 5: Upload screenshots if tests fail
@@ -100,9 +103,10 @@ jobs:
       - name: 📊 Test Summary
         if: always()
         run: |
-          echo "## 🧪 Test Results Summary" >> $GITHUB_STEP_SUMMARY
+          echo "## 🧪 Trading Platform Test Results" >> $GITHUB_STEP_SUMMARY
           echo "- **Environment:** ${{ github.event.inputs.environment }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Test Suite:** ${{ github.event.inputs.test_suite }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Browser:** ${{ github.event.inputs.browser }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Status:** ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Run Time:** $(date)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Target URL:** https://uat-pro-trading.phs.vn" >> $GITHUB_STEP_SUMMARY
